@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ConversationController;
 use App\Http\Controllers\Api\FeedController;
 use App\Http\Controllers\Api\LikeController;
 use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\MentionController;
+use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\NotificationSettingController;
 use App\Http\Controllers\Api\PostController;
@@ -104,5 +106,23 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/push', [NotificationSettingController::class, 'updatePushSettings']);
         Route::patch('/quiet-hours', [NotificationSettingController::class, 'updateQuietHours']);
         Route::patch('/email', [NotificationSettingController::class, 'updateEmailSettings']);
+    });
+    
+    Route::prefix('/conversations')->group(function () {
+        Route::get('/', [ConversationController::class, 'index']);
+        Route::post('/', [ConversationController::class, 'store']);
+        Route::get('/search', [ConversationController::class, 'search']);
+        Route::get('/{id}', [ConversationController::class, 'show']);
+        Route::post('/{id}/read', [ConversationController::class, 'markAsRead']);
+        Route::post('/{id}/leave', [ConversationController::class, 'leave']);
+        Route::delete('/{id}', [ConversationController::class, 'destroy']);
+        
+        Route::prefix('/{conversationId}/messages')->group(function () {
+            Route::get('/', [MessageController::class, 'index']);
+            Route::post('/', [MessageController::class, 'store']);
+            Route::get('/{messageId}', [MessageController::class, 'show']);
+            Route::post('/{messageId}/read', [MessageController::class, 'markAsRead']);
+            Route::delete('/{messageId}', [MessageController::class, 'destroy']);
+        });
     });
 });
