@@ -111,4 +111,14 @@ class User extends Authenticatable
     {
         return $this->followers()->where('follower_id', $user->id)->exists();
     }
+
+    public function isBlockedBy(User $user): bool
+    {
+        return $this->blockedBy()->where('blocker_id', $user->id)->exists();
+    }
+
+    public function hasBlocked(User $user): bool
+    {
+        return $this->blocks()->where('blocked_id', $user->id)->exists();
+    }
 }
