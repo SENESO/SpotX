@@ -115,6 +115,11 @@ class User extends Authenticatable
         return $this->hasMany(Message::class);
     }
 
+    public function savedPosts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(SavedPost::class);
+    }
+
     public function blockedBy(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'blocks', 'blocked_id', 'blocker_id')
