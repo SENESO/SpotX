@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\ReplyController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\UserPostController;
+use App\Http\Controllers\Api\SavedPostController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['throttle:10,1'])->group(function () {
@@ -32,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users/{id}/posts', [UserPostController::class, 'index']);
     Route::get('/users/{id}/media', [UserPostController::class, 'media']);
     Route::get('/users/{id}/likes', [UserPostController::class, 'likes']);
+    Route::get('/users/{id}/saved-posts', [SavedPostController::class, 'index']);
     Route::get('/users/{id}/followers', [UserController::class, 'followers']);
     Route::get('/users/{id}/following', [UserController::class, 'following']);
     
@@ -53,6 +55,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/{id}/quote', [QuoteController::class, 'store']);
         Route::delete('/{id}/quote', [QuoteController::class, 'destroy']);
         Route::get('/{id}/quotes', [QuoteController::class, 'index']);
+        
+        Route::post('/{id}/save', [SavedPostController::class, 'save']);
+        Route::delete('/{id}/save', [SavedPostController::class, 'unsave']);
+        Route::get('/{id}/saved', [SavedPostController::class, 'check']);
         
         Route::get('/{id}/replies', [ReplyController::class, 'index']);
         Route::post('/{id}/replies', [ReplyController::class, 'store']);

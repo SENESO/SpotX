@@ -469,6 +469,105 @@ curl -X PATCH http://localhost:8000/api/users/1 \
 
 ---
 
+## Saved Posts
+
+### Save Post
+**Endpoint:** `POST /posts/{id}/save`
+
+**Authentication:** Required
+
+**Success Response (201):**
+```json
+{
+  "message": "Post saved successfully"
+}
+```
+
+**Error Responses:**
+- `400` - Cannot save own post
+- `400` - Post already saved
+
+---
+
+### Unsave Post
+**Endpoint:** `DELETE /posts/{id}/save`
+
+**Authentication:** Required
+
+**Success Response (200):**
+```json
+{
+  "message": "Post unsaved successfully"
+}
+```
+
+**Error Responses:**
+- `404` - Saved post not found
+
+---
+
+### Check if Post is Saved
+**Endpoint:** `GET /posts/{id}/saved`
+
+**Authentication:** Required
+
+**Success Response (200):**
+```json
+{
+  "saved": true
+}
+```
+
+---
+
+### Get Saved Posts
+**Endpoint:** `GET /users/{id}/saved-posts`
+
+**Authentication:** Required
+
+**Query Parameters:**
+- `page` - Page number (default: 1)
+- `limit` - Items per page (default: 20, max: 100)
+
+**Success Response (200):**
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "uuid": "550e8400-e29b-41d4-a716-446655440000",
+      "content": "Amazing sunset today! 🌅",
+      "media_urls": ["https://example.com/sunset.jpg"],
+      "visibility": "public",
+      "user_id": 2,
+      "created_at": "2023-12-26T10:00:00Z",
+      "updated_at": "2023-12-26T10:00:00Z",
+      "deleted_at": null,
+      "author": {
+        "id": 2,
+        "uuid": "...",
+        "username": "jane_doe",
+        "full_name": "Jane Doe",
+        "profile_image_url": "https://..."
+      },
+      "likes_count": 45,
+      "reposts_count": 8,
+      "quotes_count": 3,
+      "replies_count": 12
+    }
+  ],
+  "pagination": {
+    "current_page": 1,
+    "next_page_url": "http://localhost:8000/api/users/1/saved-posts?page=2",
+    "prev_page_url": null
+  }
+}
+```
+
+**Notes:** Posts are ordered by save date (newest saved first)
+
+---
+
 ## Postman Collection
 
 Import the `threads-clone.postman_collection.json` file into Postman for easy API testing.

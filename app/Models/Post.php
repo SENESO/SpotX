@@ -177,4 +177,12 @@ class Post extends Model
 
         return false;
     }
+
+    public function isSavedBy(User $user): bool
+    {
+        return SavedPost::where([
+            'user_id' => $user->id,
+            'post_id' => $this->id,
+        ])->exists();
+    }
 }
