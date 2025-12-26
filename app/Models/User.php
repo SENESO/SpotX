@@ -97,6 +97,24 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function conversations(): BelongsToMany
+    {
+        return $this->belongsToMany(Conversation::class, 'conversation_participants')
+            ->whereNull('conversation_participants.left_at')
+            ->withTimestamps(['joined_at']);
+    }
+
+    public function allConversations(): BelongsToMany
+    {
+        return $this->belongsToMany(Conversation::class, 'conversation_participants')
+            ->withTimestamps(['joined_at', 'left_at']);
+    }
+
+    public function sentMessages(): HasMany
+    {
+        return $this->hasMany(Message::class);
+    }
+
     public function blockedBy(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'blocks', 'blocked_id', 'blocker_id')
