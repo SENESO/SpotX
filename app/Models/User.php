@@ -29,6 +29,7 @@ class User extends Authenticatable
         'is_verified',
         'is_private',
         'is_suspended',
+        'fcm_token',
     ];
 
     protected $hidden = [

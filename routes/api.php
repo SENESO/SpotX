@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\FeedController;
 use App\Http\Controllers\Api\LikeController;
 use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\MentionController;
+use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\NotificationSettingController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\QuoteController;
 use App\Http\Controllers\Api\RepostController;
@@ -82,5 +84,25 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('/mentions')->group(function () {
         Route::get('/suggestions', [MentionController::class, 'suggestions']);
         Route::get('/', [MentionController::class, 'index']);
+    });
+    
+    Route::prefix('/notifications')->group(function () {
+        Route::get('/', [NotificationController::class, 'index']);
+        Route::get('/unread-count', [NotificationController::class, 'getUnreadCount']);
+        Route::get('/{id}', [NotificationController::class, 'show']);
+        Route::patch('/{id}/read', [NotificationController::class, 'markAsRead']);
+        Route::post('/mark-all-read', [NotificationController::class, 'markAllAsRead']);
+        Route::post('/mark-multiple-read', [NotificationController::class, 'markMultipleAsRead']);
+        Route::delete('/{id}', [NotificationController::class, 'destroy']);
+        Route::delete('/clear-all', [NotificationController::class, 'clearAll']);
+        Route::delete('/delete-multiple', [NotificationController::class, 'destroyMultiple']);
+    });
+    
+    Route::prefix('/notification-settings')->group(function () {
+        Route::get('/', [NotificationSettingController::class, 'index']);
+        Route::patch('/', [NotificationSettingController::class, 'update']);
+        Route::patch('/push', [NotificationSettingController::class, 'updatePushSettings']);
+        Route::patch('/quiet-hours', [NotificationSettingController::class, 'updateQuietHours']);
+        Route::patch('/email', [NotificationSettingController::class, 'updateEmailSettings']);
     });
 });
