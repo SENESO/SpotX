@@ -37,6 +37,16 @@ class Reply extends Model
             if (empty($reply->uuid)) {
                 $reply->uuid = (string) Str::uuid();
             }
+            
+            if ($reply->post_id && empty($reply->parent_reply_id)) {
+                Post::where('id', $reply->post_id)->increment('replies_count');
+            }
+        });
+
+        static::deleting(function ($reply) {
+            if ($reply->post_id && empty($reply->parent_reply_id)) {
+                Post::where('id', $reply->post_id)->decrement('replies_count');
+            }
         });
     }
 
